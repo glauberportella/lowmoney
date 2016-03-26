@@ -4,7 +4,7 @@ angular.module('app.controllers', [])
 
 })
    
-.controller('agNciasCtrl', function($scope) {
+.controller('agenciasCtrl', function($scope) {
 
 })
     

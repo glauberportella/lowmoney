@@ -10,7 +10,7 @@ angular.module('app.routes', [])
     
   
 
-      .state('tabsController.mapa', {
+  .state('tabsController.mapa', {
     url: '/',
     views: {
       'tab1': {
@@ -20,24 +20,23 @@ angular.module('app.routes', [])
     }
   })
 
-  .state('tabsController.agNcias', {
+  .state('tabsController.agencias', {
     url: '/agencias',
     views: {
       'tab2': {
-        templateUrl: 'templates/agNcias.html',
-        controller: 'agNciasCtrl'
+        templateUrl: 'templates/agencias.html',
+        controller: 'agenciasCtrl'
       }
     }
   })
 
   .state('tabsController', {
-    url: '/page1',
+    url: '/main',
     templateUrl: 'templates/tabsController.html',
     abstract:true
   })
 
-$urlRouterProvider.otherwise('/page1/')
+  $urlRouterProvider.otherwise('/main')
 
-  
 
 });
