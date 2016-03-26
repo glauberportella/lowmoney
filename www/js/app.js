@@ -7,7 +7,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('app', ['ionic', 'ngCordova', 'app.controllers', 'app.routes', 'app.services', 'app.directives'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $localStorage, $cordovaGeolocation, database) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -18,5 +18,12 @@ angular.module('app', ['ionic', 'ngCordova', 'app.controllers', 'app.routes', 'a
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+    // saves user geolocation
+    var posOptions = {timeout: 5000, enableHighAccuracy: false};
+    $cordovaGeolocation.getCurrentPosition(posOptions).then(function(position) {
+      $localStorage.setObject('position', {lat: position.coords.latitude, lng: position.coords.longitude});
+    });
+    // data sync
+    database.local.sync(database.remote, {live: true, retry: true});
   });
 })

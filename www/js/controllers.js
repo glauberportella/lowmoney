@@ -8,11 +8,12 @@ angular.module('app.controllers', ['uiGmapgoogle-maps'])
   });
 })
 
-.controller('mapaCtrl', function($scope, $ionicPlatform, uiGmapGoogleMapApi) {
+.controller('mapaCtrl', function($scope, $ionicPlatform, $localStorage, uiGmapGoogleMapApi) {
+	var position = $localStorage.getObject('position');
 	$scope.map = {
 		center: {
-			latitude: 45,
-			longitude: -73
+			latitude: position.lat,
+			longitude: position.lng
 		},
 		zoom: 17
 	};
