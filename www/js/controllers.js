@@ -8,8 +8,9 @@ angular.module('app.controllers', ['uiGmapgoogle-maps'])
   });
 })
 
-.controller('mapaCtrl', function($scope, $ionicPlatform, $localStorage, uiGmapGoogleMapApi) {
+.controller('mapaCtrl', function($scope, $ionicPlatform, $localStorage, uiGmapIsReady, agenciaStore) {
 	var position = $localStorage.getObject('position');
+
 	$scope.map = {
 		center: {
 			latitude: position.lat,
@@ -18,10 +19,23 @@ angular.module('app.controllers', ['uiGmapgoogle-maps'])
 		zoom: 17
 	};
 
-	$ionicPlatform.ready(function() {
-		uiGmapGoogleMapApi.then(function(maps) {
+	$scope.voce = {
+		latitude: position.lat,
+		longitude: position.lng,
+		options: {
+			icon: '/img/icons/you.png'
+		}
+	};
 
-	    });
+	$ionicPlatform.ready(function() {
+		$scope.agencias = agenciaStore.load(position);
+
+		uiGmapIsReady.promise(1).then(function(instances) {
+			/*instances.forEach(function(inst) {
+	            var map = inst.map;
+	            console.log(map);
+	        });*/
+		});
 	});
 })
    

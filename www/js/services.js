@@ -19,6 +19,16 @@ angular.module('app.services', [])
 
 }])
 
+.service('agenciaStore', function(database) {
+	var _load = function(position, distance) {
+		return [{_id: 1, latitude: -19, longitude: -43, icon: '/img/icons/symbol_dollar.png'}];
+	};
+
+	return {
+		load: _load
+	}
+})
+
 .service('database', function() {
 
 	var localDb = new PouchDB('lowmoney');

@@ -1,5 +1,17 @@
 <ion-view title="Mapa" id="mapa">
     <ion-content padding="false" class="has-header">
-		<ui-gmap-google-map data-tap-disabled="true" center='map.center' zoom='map.zoom'></ui-gmap-google-map>
+		<ui-gmap-google-map data-tap-disabled="true" center='map.center' zoom='map.zoom'>
+			<ui-gmap-marker
+		        idKey='"voce"'
+		        coords='voce'
+		        options='voce.options'>
+			</ui-gmap-marker>
+			<ui-gmap-markers
+            	models="agencias"
+            	idKey="'_id'"
+            	coords="'self'"
+            	icon="'icon'">
+            </ui-gmap-markers>
+		</ui-gmap-google-map>
     </ion-content>
 </ion-view>
