@@ -21,7 +21,25 @@ angular.module('app.services', [])
 
 .service('agenciaStore', function(database) {
 	var _load = function(position, distance) {
-		return [{_id: 1, latitude: -19, longitude: -43, icon: '/img/icons/symbol_dollar.png'}];
+		return [
+			{
+				_id: 1,
+				_rev: 123,
+				latitude: -19, 
+				longitude: -43, 
+				bank: 'Itaú',
+				ag: '123-4',
+				icon: '/img/icons/symbol_dollar.png',
+				notes: [
+					2,
+					5,
+					10,
+					20,
+					50,
+					100
+				]
+			}
+		];
 	};
 
 	return {
