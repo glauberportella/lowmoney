@@ -19,31 +19,82 @@ angular.module('app.services', [])
 
 }])
 
-.service('agenciaStore', function(database) {
+.service('agenciaStore', function(database, $q) {
+
+	var _data = [];
+
+	var toRad = function(num) {
+		return num * Math.PI / 180;
+	};
+
+	var haversine = function(start, end, options) {
+		var km    = 6371;
+		var mile  = 3960;
+		options   = options || {};
+
+		var R = options.unit === 'mile' ?
+		  mile :
+		  km;
+
+		var dLat = toRad(end.latitude - start.latitude);
+		var dLon = toRad(end.longitude - start.longitude);
+		var lat1 = toRad(start.latitude);
+		var lat2 = toRad(end.latitude);
+
+		var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+		        Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
+		var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+		if (options.threshold) {
+		  return options.threshold > (R * c);
+		} else {
+		  return R * c;
+		}
+  	};
+
 	var _load = function(position, distance) {
-		return [
-			{
-				_id: 1,
-				_rev: 123,
-				latitude: -19, 
-				longitude: -43, 
-				bank: 'Itaú',
-				ag: '123-4',
-				icon: '/img/icons/symbol_dollar.png',
-				notes: [
-					2,
-					5,
-					10,
-					20,
-					50,
-					100
-				]
-			}
-		];
+		var deferred = $q.defer();
+
+		/*
+		Doc structure:
+		{
+			_id: 1,
+			_rev: 123,
+			latitude: -19, 
+			longitude: -43, 
+			bank: 'Itaú',
+			agency: '123-4',
+			icon: '/img/icons/symbol_dollar.png',
+			notes: [
+				2,
+				5,
+				10,
+				20,
+				50,
+				100
+			]
+		}
+		*/
+		database.local.allDocs({
+			include_docs: true,
+		}).then(function(result) {
+			result.rows.forEach(function(agencia) {
+				var dist = haversine(position, agencia, { unit: 'km' });
+				if (dist <= distance) {
+					_data.push(agencia);
+				}
+			});
+			deferred.resolve(data);
+		}).catch(function(err) {
+			deferred.reject(err);
+		});
+
+		return deferred.promise;
 	};
 
 	return {
-		load: _load
+		load: _load,
+		data: _data
 	}
 })
 

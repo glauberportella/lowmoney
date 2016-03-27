@@ -13,23 +13,23 @@ angular.module('app.controllers', ['uiGmapgoogle-maps'])
 
 	$scope.map = {
 		center: {
-			latitude: position.lat,
-			longitude: position.lng
+			latitude: position.latitude,
+			longitude: position.longitude
 		},
 		zoom: 17
 	};
 
 	$scope.voce = {
-		latitude: position.lat,
-		longitude: position.lng,
+		latitude: position.latitude,
+		longitude: position.longitude,
 		options: {
 			icon: '/img/icons/you.png'
 		}
 	};
+	
+	$scope.agencias = agenciaStore.data;
 
 	$ionicPlatform.ready(function() {
-		$scope.agencias = agenciaStore.load(position);
-
 		uiGmapIsReady.promise(1).then(function(instances) {
 			/*instances.forEach(function(inst) {
 	            var map = inst.map;
@@ -42,4 +42,7 @@ angular.module('app.controllers', ['uiGmapgoogle-maps'])
 .controller('agenciasCtrl', function($scope) {
 
 })
-    
+ 
+.controller('adicionarAgenciaCtrl', function($scope) {
+
+});

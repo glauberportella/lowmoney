@@ -34,6 +34,12 @@ angular.module('app.routes', [])
     abstract:true
   })
 
+  .state('adicionarAgNcia', {
+    url: '/adicionar',
+    templateUrl: 'templates/adicionarAgencia.html',
+    controller: 'adicionarAgenciaCtrl'
+  })
+
   $urlRouterProvider.otherwise('/main/mapa')
 
 });

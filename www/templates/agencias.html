@@ -1,9 +1,17 @@
 <ion-view title="Agências" id="agencias">
-    <ion-content overflow-scroll="true" padding="true" class="has-header">
+	<ion-nav-buttons side="right">
+		<button class="button icon ion-ios-plus-outline" ng-click="add()"></button>
+	</ion-nav-buttons>
+    <ion-content overflow-scroll="true" class="has-header">
         <ion-list>
-            <ion-item>Agência 123</ion-item>
-            <ion-item>Agência 234</ion-item>
-            <ion-item>Agência 345</ion-item>
+            <ion-item class="agency-item item-thumbnail-left item-text-wrap" collection-repeat="agencia in agencias">
+            	<img class="agency-icon" ng-src="{{agencia.icon}}" alt="">
+            	<strong>{{agencia.bank}}: {{agencia.agency}}</strong>
+            	<div class="agency-info">
+            		<span class="agency-note" ng-repeat="note in agencia.notes">{{note}}</span><br>
+            		<address>{{agencia.address}}</address>
+            	</div>
+            </ion-item>
         </ion-list>
     </ion-content>
 </ion-view>
