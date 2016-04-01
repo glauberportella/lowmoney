@@ -1,24 +1,37 @@
 <ion-view title="Adicionar Agência" id="adicionar">
     <ion-content overflow-scroll="true" padding="true" class="has-header">
-        <form class="list">
-            <label class="item item-input" name="address">
+        <form class="list" ng-submit="salvar(agencia)">
+
+            <label class="item item-input" name="endereco">
                 <input type="text" placeholder="Endereço da agência" ng-model="agencia.endereco">
             </label>
 
-            <ion-select label="Banco" label-field="nome" provider="bancos" ng-model="agencia.banco"/>
+            <input type="hidden" ng-model="agencia.latitude" name="latitude"></input>
+            <input type="hidden" ng-model="agencia.longitude" name="longitude"></input>
 
-            <div class="spacer" style="height: 32px;"></div>
+            <div>
+              <ion-select label="Banco" label-field="nome" provider="bancos" ng-model="agencia.banco"/>
+            </div>
 
-            <ion-toggle toggle-class="toggle-positive" ng-checked="true" name="notes[2]">R$ 2,00</ion-toggle>
-            <ion-toggle toggle-class="toggle-positive" ng-checked="true" name="notes[5]">R$ 5,00</ion-toggle>
-            <ion-toggle toggle-class="toggle-positive" name="notes[10]">R$ 10,00</ion-toggle>
-            <ion-toggle toggle-class="toggle-positive" name="notes[20]">R$ 20,00</ion-toggle>
-            <ion-toggle toggle-class="toggle-positive" name="notes[50]">R$ 50,00</ion-toggle>
-            <ion-toggle toggle-class="toggle-positive" name="notes[100]">R$ 100,00</ion-toggle>
+            <div class="spacer" style="height: 15px;"></div>
 
-            <div class="spacer" style="height: 32px;"></div>
+            <label class="item item-input" name="agenciaId">
+              <input type="text" placeholder="Núm. da agência (opcional)" ng-model="agencia.agenciaId"></input>
+            </label>
 
-            <button id="adicionarAgencia-add" class="button button-positive  button-block icon-left ion-ios-plus-outline">Adicionar</button>
+            <div class="spacer" style="height: 15px;"></div>
+
+            <ion-toggle ng-model="agencia.nota2" toggle-class="toggle-positive" ng-checked="true" name="notes[2]">R$ 2,00</ion-toggle>
+            <ion-toggle ng-model="agencia.nota5" toggle-class="toggle-positive" ng-checked="true" name="notes[5]">R$ 5,00</ion-toggle>
+            <ion-toggle ng-model="agencia.nota10" toggle-class="toggle-positive" name="notes[10]">R$ 10,00</ion-toggle>
+            <ion-toggle ng-model="agencia.nota20" toggle-class="toggle-positive" name="notes[20]">R$ 20,00</ion-toggle>
+            <ion-toggle ng-model="agencia.nota50" toggle-class="toggle-positive" name="notes[50]">R$ 50,00</ion-toggle>
+            <ion-toggle ng-model="agencia.nota100" toggle-class="toggle-positive" name="notes[100]">R$ 100,00</ion-toggle>
+
+            <div class="spacer" style="height: 15px;"></div>
+
+            <button id="adicionarAgencia-add" class="button button-positive button-block icon-left ion-ios-plus-outline">Adicionar</button>
         </form>
+
     </ion-content>
 </ion-view>

@@ -5,12 +5,11 @@ angular.module('app.directives', [])
   return {
     restrict: 'EAC',
     scope: {
-       label:'@',
-        labelField:'@',
-        provider:'=',
-        ngModel: '=?',
-        ngValue: '=?',
-
+      label:'@',
+      labelField:'@',
+      provider:'=',
+      ngModel: '=?',
+      ngValue: '=?',
     },
     require: '?ngModel',
     transclude : false,
@@ -39,7 +38,7 @@ angular.module('app.directives', [])
       +'</div>'
            ,
     link: function (scope, element, attrs,ngModel) {
-      scope.ngValue = scope.ngValue !== undefined ? scope.ngValue :'item';
+      scope.ngValue = scope.ngValue !== undefined ? scope.ngValue : 'item';
 
       scope.selecionar = function(item){
         ngModel.$setViewValue(item);
@@ -47,12 +46,12 @@ angular.module('app.directives', [])
       };
 
       element.bind('click',function(){
-        element.find('input').focus();
+        element.find('input')[0].focus();
       });
 
       scope.open = function(){
         scope.ngModel = "";
-        return scope.showHide=!scope.showHide;
+        return scope.showHide = !scope.showHide;
       };
 
       scope.onKeyDown = function(){
