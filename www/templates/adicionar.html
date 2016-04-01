@@ -1,0 +1,24 @@
+<ion-view title="Adicionar Agência" id="adicionar">
+    <ion-content overflow-scroll="true" padding="true" class="has-header">
+        <form class="list">
+            <label class="item item-input" name="address">
+                <input type="text" placeholder="Endereço da agência" ng-model="agencia.endereco">
+            </label>
+
+            <ion-select label="Banco" label-field="nome" provider="bancos" ng-model="agencia.banco"/>
+
+            <div class="spacer" style="height: 32px;"></div>
+
+            <ion-toggle toggle-class="toggle-positive" ng-checked="true" name="notes[2]">R$ 2,00</ion-toggle>
+            <ion-toggle toggle-class="toggle-positive" ng-checked="true" name="notes[5]">R$ 5,00</ion-toggle>
+            <ion-toggle toggle-class="toggle-positive" name="notes[10]">R$ 10,00</ion-toggle>
+            <ion-toggle toggle-class="toggle-positive" name="notes[20]">R$ 20,00</ion-toggle>
+            <ion-toggle toggle-class="toggle-positive" name="notes[50]">R$ 50,00</ion-toggle>
+            <ion-toggle toggle-class="toggle-positive" name="notes[100]">R$ 100,00</ion-toggle>
+
+            <div class="spacer" style="height: 32px;"></div>
+
+            <button id="adicionarAgencia-add" class="button button-positive  button-block icon-left ion-ios-plus-outline">Adicionar</button>
+        </form>
+    </ion-content>
+</ion-view>

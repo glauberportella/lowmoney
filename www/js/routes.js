@@ -8,6 +8,7 @@ angular.module('app.routes', [])
   // Each state's controller can be found in controllers.js
   $stateProvider
 
+
   .state('tabsController.mapa', {
     url: '/mapa',
     views: {
@@ -28,16 +29,20 @@ angular.module('app.routes', [])
     }
   })
 
+  .state('tabsController.adicionar', {
+    url: '/adicionar',
+    views: {
+      'tab3': {
+        templateUrl: 'templates/adicionar.html',
+        controller: 'adicionarCtrl',
+      }
+    }
+  })
+
   .state('tabsController', {
     url: '/main',
     templateUrl: 'templates/tabsController.html',
     abstract:true
-  })
-
-  .state('adicionarAgNcia', {
-    url: '/adicionar',
-    templateUrl: 'templates/adicionarAgencia.html',
-    controller: 'adicionarAgenciaCtrl'
   })
 
   $urlRouterProvider.otherwise('/main/mapa')

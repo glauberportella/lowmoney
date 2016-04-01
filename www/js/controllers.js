@@ -8,7 +8,7 @@ angular.module('app.controllers', ['uiGmapgoogle-maps'])
   });
 })
 
-.controller('mapaCtrl', function($scope, $ionicPlatform, $localStorage, uiGmapIsReady, agenciaStore) {
+.controller('mapaCtrl', function($scope, $ionicPlatform, $localStorage, $state, uiGmapIsReady, agenciaStore) {
 	var position = $localStorage.getObject('position');
 
 	$scope.map = {
@@ -26,10 +26,10 @@ angular.module('app.controllers', ['uiGmapgoogle-maps'])
 			icon: '/img/icons/you.png'
 		}
 	};
-	
+
 	$scope.agencias = agenciaStore.data;
 
-	$ionicPlatform.ready(function() {
+ 	$ionicPlatform.ready(function() {
 		uiGmapIsReady.promise(1).then(function(instances) {
 			/*instances.forEach(function(inst) {
 	            var map = inst.map;
@@ -38,11 +38,11 @@ angular.module('app.controllers', ['uiGmapgoogle-maps'])
 		});
 	});
 })
-   
+
 .controller('agenciasCtrl', function($scope) {
 
 })
- 
-.controller('adicionarAgenciaCtrl', function($scope) {
 
+.controller('adicionarCtrl', function($scope, BancosBrasil) {
+  $scope.bancos = BancosBrasil;
 });
