@@ -58,21 +58,19 @@ angular.module('app.services', [])
 		/*
 		Doc structure:
 		{
-			_id: 1,
+			_id: {<bancoId>, <latitude>, <longitude>},
 			_rev: 123,
 			latitude: -19,
 			longitude: -43,
-			bank: 'Itaú',
-			agency: '123-4',
-			icon: '/img/icons/symbol_dollar.png',
-			notes: [
-				2,
-				5,
-				10,
-				20,
-				50,
-				100
-			]
+			banco: 'Itaú',
+			agenciaId: '123-4',
+			icone: '/img/icons/symbol_dollar.png',
+			nota2: true,
+      nota5: true,
+      nota10: false,
+      nota20: true,
+      nota50: false,
+      nota100: true
 		}
 		*/
 		database.local.allDocs({
@@ -92,18 +90,87 @@ angular.module('app.services', [])
 		return deferred.promise;
 	};
 
+  /**
+   * Add or update a agencia in db
+   * @param {Object} agencia
+   * @return promise
+   */
+  var _put = function(agencia) {
+    var deferred = $q.defer();
+
+    if (agencia._id == undefined) {
+      agencia._id = { agencia.banco.id, agencia.latitude, agencia.longitude };
+    }
+
+    // TODO add icon as Bank logo
+    agencia.icone: '/img/icons/symbol_dollar.png';
+
+    if (agencia._rev !== undefined) {
+      database.local.put(agencia, agencia._id, agencia._rev).then(function(response) {
+        deferred.resolve(response);
+      }).catch(function(err) {
+        deferred.reject(err);
+      });
+    } else {
+      database.local.put(agencia).then(function(response) {
+        deferred.resolve(response);
+        _data.push(agencia);
+      }).catch(function(err) {
+        deferred.reject(err);
+      });
+    }
+
+    // reload data
+    _load();
+
+    return deferred.promise;
+  };
+
 	return {
 		load: _load,
+    put: _put,
 		data: _data
 	}
 })
 
 .service('database', function() {
 
-	var localDb = new PouchDB('lowmoney');
-	var remoteDb = new PouchDB('http://server1.desenvolve4web.com:5984/lowmoney');
+  var localDb = new PouchDB('lowmoney');
+  var remoteDb = new PouchDB('http://server1.desenvolve4web.com:5984/lowmoney');
+
+
+  // Design documents
+  /*var ddoc = {
+    _id: '_design/agencia',
+    views: {
+      agencia: {
+        map: function mapFun(doc) {
+          if (doc.title) {
+            emit(doc.title);
+          }
+        }.toString()
+      }
+    }
+  };*/
+
+  /**
+   * Initialize database design documents for PouchDB
+   * @return {void}
+   */
+  var _init = function() {
+
+    /*localDb.put(ddoc).catch(function (err) {
+      if (err.status !== 409) {
+        throw err;
+      }
+      // ignore if doc already exists
+    });*/
+
+    // TODO
+  };
 
 	return {
+    init: _init,
 		local: localDb,
 		remote: remoteDb
 	};
