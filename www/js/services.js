@@ -112,8 +112,8 @@ angular.module('app.services', [])
       agencia._id = [agencia.banco.id, agencia.latitude, agencia.longitude].join('');
     }
 
-    agencia.icone = '/img/bancos/'+agencia.banco.id+'.png';
-    agencia.marker = '/img/markers/'+agencia.banco.id+'.png';
+    agencia.icone = 'img/bancos/'+agencia.banco.id+'.png';
+    agencia.marker = 'img/markers/'+agencia.banco.id+'.png';
 
     if (agencia._rev !== undefined) {
       database.local.put(agencia, agencia._id, agencia._rev).then(function(response) {

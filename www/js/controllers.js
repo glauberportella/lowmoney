@@ -59,6 +59,9 @@ angular.module('app.controllers', ['uiGmapgoogle-maps'])
 		zoom: mapZoom,
     events: {
       click: mapClick
+    },
+    options: {
+      disableDefaultUI: true
     }
 	};
 
@@ -66,13 +69,11 @@ angular.module('app.controllers', ['uiGmapgoogle-maps'])
 		latitude: position.latitude,
 		longitude: position.longitude,
 		options: {
-			icon: '/img/icons/you.png'
+			icon: 'img/icons/you.png'
 		}
 	};
 
   $scope.minhaLocalizacao = minhaLocalizacao;
-
-  console.log($rootScope.agencias);
 })
 
 .controller('agenciasCtrl', function($scope, $rootScope, defaultDistance, agenciaStore) {
