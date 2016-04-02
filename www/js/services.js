@@ -1,3 +1,4 @@
+
 angular.module('app.services', [])
 
 .factory('$localStorage', ['$window', function($window) {
@@ -19,7 +20,7 @@ angular.module('app.services', [])
 
 }])
 
-.service('agenciaStore', function(database, $q) {
+.service('agenciaStore', function(database, $q, $rootScope, $localStorage, defaultDistance) {
 
 	var _data = [];
 
@@ -50,10 +51,15 @@ angular.module('app.services', [])
 		} else {
 		  return R * c;
 		}
-  	};
+	};
 
 	var _load = function(position, distance) {
 		var deferred = $q.defer();
+
+    if (!position)
+      return;
+
+    distance = distance || defaultDistance;
 
 		/*
 		Doc structure:
@@ -76,13 +82,16 @@ angular.module('app.services', [])
 		database.local.allDocs({
 			include_docs: true,
 		}).then(function(result) {
-			result.rows.forEach(function(agencia) {
-				var dist = haversine(position, agencia, { unit: 'km' });
+      _data.length = 0;
+      _data = [];
+			result.rows.forEach(function(res) {
+				var dist = haversine(position, res.doc, { unit: 'km' });
 				if (dist <= distance) {
-					_data.push(agencia);
+					_data.push(res.doc);
 				}
 			});
-			deferred.resolve(data);
+      $rootScope.$broadcast('agencia:loaded', _data);
+			deferred.resolve(_data);
 		}).catch(function(err) {
 			deferred.reject(err);
 		});
@@ -99,11 +108,11 @@ angular.module('app.services', [])
     var deferred = $q.defer();
 
     if (agencia._id == undefined) {
-      agencia._id = { agencia.banco.id, agencia.latitude, agencia.longitude };
+      agencia._id = [agencia.banco.id, agencia.latitude, agencia.longitude].join('');
     }
 
     // TODO add icon as Bank logo
-    agencia.icone: '/img/icons/symbol_dollar.png';
+    agencia.icone = '/img/icons/symbol_dollar.png';
 
     if (agencia._rev !== undefined) {
       database.local.put(agencia, agencia._id, agencia._rev).then(function(response) {
@@ -114,14 +123,14 @@ angular.module('app.services', [])
     } else {
       database.local.put(agencia).then(function(response) {
         deferred.resolve(response);
-        _data.push(agencia);
       }).catch(function(err) {
         deferred.reject(err);
       });
     }
 
     // reload data
-    _load();
+    var pos = $localStorage.getObject('position');
+    _load(pos, 3);
 
     return deferred.promise;
   };
@@ -184,7 +193,7 @@ angular.module('app.services', [])
 		 	if (!change.deleted) {
 				// for add or update
 		   		$rootScope.$apply(function() {
-		     		database.local.get(change.id, function(err, doc) {
+		     		database.local.get(change._id, function(err, doc) {
 		       			$rootScope.$apply(function() {
 		         			if (err) {
 		         				console.log(err);
@@ -197,7 +206,7 @@ angular.module('app.services', [])
 		 	} else {
 		 		// for delete
 		   		$rootScope.$apply(function() {
-		     		$rootScope.$broadcast('delete', change.id);
+		     		$rootScope.$broadcast('delete', change._id);
 	   			});
 	 		}
 		}

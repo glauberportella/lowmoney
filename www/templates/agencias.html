@@ -1,14 +1,21 @@
 <ion-view title="Agências" id="agencias">
-    <ion-content overflow-scroll="true" class="has-header">
-        <ion-list>
-            <ion-item class="agency-item item-thumbnail-left item-text-wrap" collection-repeat="agencia in agencias">
-            	<img class="agency-icon" ng-src="{{agencia.icon}}" alt="">
-            	<strong>{{agencia.bank}}: {{agencia.agency}}</strong>
-            	<div class="agency-info">
-            		<span class="agency-note" ng-repeat="note in agencia.notes">{{note}}</span><br>
-            		<address>{{agencia.address}}</address>
-            	</div>
-            </ion-item>
-        </ion-list>
+    <ion-content padding="10" overflow-scroll="true" class="has-header">
+      <p class="text-center">Agências próximas a você (apróx. {{distancia}} Km)</p>
+      <ion-list>
+        <ion-item class="agency-item item-thumbnail-left item-text-wrap" ng-repeat="agencia in agencias">
+        	<img class="agency-icon" ng-src="{{agencia.icone}}" alt="">
+        	<strong>{{agencia.banco.id}} {{agencia.banco.nome}}: <span ng-if="agencia.agenciaId">Agência {{agencia.agenciaId}}</span></strong>
+        	<div class="agency-info">
+            <span class="agency-note" nf-if="agencia.nota2">R$ 2,00</span>
+            <span class="agency-note" nf-if="agencia.nota5">R$ 5,00</span>
+            <span class="agency-note" nf-if="agencia.nota10">R$ 10,00</span>
+            <span class="agency-note" nf-if="agencia.nota20">R$ 20,00</span>
+            <span class="agency-note" nf-if="agencia.nota50">R$ 50,00</span>
+            <span class="agency-note" nf-if="agencia.nota100">R$ 100,00</span>
+
+        		<address><i class="ion-ios-location-outline"></i> {{agencia.endereco}}</address>
+        	</div>
+        </ion-item>
+      </ion-list>
     </ion-content>
 </ion-view>

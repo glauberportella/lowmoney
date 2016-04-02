@@ -8,15 +8,58 @@ angular.module('app.controllers', ['uiGmapgoogle-maps'])
   });
 })
 
-.controller('mapaCtrl', function($scope, $ionicPlatform, $localStorage, $state, uiGmapIsReady, agenciaStore) {
+.controller('mapaCtrl', function($scope, $ionicPlatform, $localStorage, $state, $cordovaGeolocation, agenciaStore, defaultDistance, mapZoom) {
 	var position = $localStorage.getObject('position');
+
+  var mapClick = function(map, event, args) {
+    var location = args[0].latLng;
+
+    position.latitude = location.lat();
+    position.longitude = location.lng();
+
+    $scope.voce.latitude = position.latitude;
+    $scope.voce.longitude = position.longitude;
+
+    $scope.$apply(function() {
+      $scope.map.center.latitude = position.latitude;
+      $scope.map.center.longitude = position.longitude;
+    });
+
+    $localStorage.setObject('position', position);
+
+    agenciaStore.load(position, defaultDistance);
+  };
+
+  var minhaLocalizacao = function() {
+    $cordovaGeolocation.getCurrentPosition({
+      timeout: 5000,
+      enableHighAccuracy: false
+    }).then(function(position) {
+      var pos = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude
+      };
+
+      $scope.voce.latitude = pos.latitude;
+      $scope.voce.longitude = pos.longitude;
+      $scope.map.center.latitude = pos.latitude;
+      $scope.map.center.longitude = pos.longitude;
+
+      $localStorage.setObject('position', pos);
+      // reload data
+      agenciaStore.load(pos, defaultDistance);
+    });
+  };
 
 	$scope.map = {
 		center: {
 			latitude: position.latitude,
 			longitude: position.longitude
 		},
-		zoom: 17
+		zoom: mapZoom,
+    events: {
+      click: mapClick
+    }
 	};
 
 	$scope.voce = {
@@ -27,23 +70,24 @@ angular.module('app.controllers', ['uiGmapgoogle-maps'])
 		}
 	};
 
-	$scope.agencias = agenciaStore.data;
+	$scope.agencias = [];
 
- 	$ionicPlatform.ready(function() {
-		uiGmapIsReady.promise(1).then(function(instances) {
-			/*instances.forEach(function(inst) {
-	            var map = inst.map;
-	            console.log(map);
-	        });*/
-		});
-	});
+  $scope.minhaLocalizacao = minhaLocalizacao;
+
+ 	$scope.$on('agencia:loaded', function(event, agencias) {
+    $scope.agencias = agencias;
+  });
 })
 
-.controller('agenciasCtrl', function($scope) {
-
+.controller('agenciasCtrl', function($scope, defaultDistance, agenciaStore) {
+  $scope.distancia = defaultDistance;
+  $scope.agencias = [];
+  $scope.$on('agencia:loaded', function(event, agencias) {
+    $scope.agencias = agencias;
+  });
 })
 
-.controller('adicionarCtrl', function($scope, $localStorage, uiGmapGoogleMapApi, Geocoder, BancosBrasil) {
+.controller('adicionarCtrl', function($scope, $localStorage, $ionicLoading, $ionicPopup, $state, uiGmapGoogleMapApi, Geocoder, BancosBrasil, agenciaStore) {
 
   var position = $localStorage.getObject('position');
 
@@ -67,7 +111,20 @@ angular.module('app.controllers', ['uiGmapgoogle-maps'])
   $scope.agencia.longitude = position.longitude;
 
   $scope.salvar = function(agencia) {
-    console.log(agencia);
+    $ionicLoading.show({
+      template: 'Adicionando...'
+    });
+
+    agenciaStore.put(agencia).then(function() {
+      $ionicLoading.hide();
+      $state.go('tabsController.mapa');
+    }).catch(function(err) {
+      $ionicLoading.hide();
+      $ionicPopup.alert({
+        title: 'Erro ao adicionar',
+        template: err
+      });
+    });
   };
 
   uiGmapGoogleMapApi.then(function(maps) {
