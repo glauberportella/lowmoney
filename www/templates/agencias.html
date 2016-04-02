@@ -2,7 +2,7 @@
     <ion-content padding="10" overflow-scroll="true" class="has-header">
       <p class="text-center">Agências próximas a você (apróx. {{distancia}} Km)</p>
       <ion-list>
-        <ion-item class="agency-item item-thumbnail-left item-text-wrap" collection-repeat="agencia in agencias">
+        <ion-item class="agency-item item-thumbnail-left item-text-wrap" ng-repeat="agencia in agencias">
         	<img class="agency-icon" ng-src="{{agencia.icone}}" alt="">
         	<strong>{{agencia.banco.id}} {{agencia.banco.nome}}: <span ng-if="agencia.agenciaId">Agência {{agencia.agenciaId}}</span></strong>
         	<div class="agency-info">
