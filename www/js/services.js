@@ -1,7 +1,7 @@
 
 angular.module('app.services', [])
 
-.factory('$localStorage', ['$window', function($window) {
+.factory('$localStorage', function($window) {
 
   return {
     set: function(key, value) {
@@ -18,7 +18,7 @@ angular.module('app.services', [])
     }
   };
 
-}])
+})
 
 .service('agenciaStore', function(database, $q, $rootScope, $localStorage, defaultDistance) {
 
@@ -64,13 +64,14 @@ angular.module('app.services', [])
 		/*
 		Doc structure:
 		{
-			_id: {<bancoId>, <latitude>, <longitude>},
+			_id: "<bancoId><latitude><longitude>",
 			_rev: 123,
 			latitude: -19,
 			longitude: -43,
-			banco: 'Itaú',
+			banco: { id: '341', nome: 'Itaú' },
 			agenciaId: '123-4',
-			icone: '/img/icons/symbol_dollar.png',
+			icone: '/img/bancos/341.png',
+      marker: '/img/markers/341.png',
 			nota2: true,
       nota5: true,
       nota10: false,
@@ -111,8 +112,8 @@ angular.module('app.services', [])
       agencia._id = [agencia.banco.id, agencia.latitude, agencia.longitude].join('');
     }
 
-    // TODO add icon as Bank logo
-    agencia.icone = '/img/icons/symbol_dollar.png';
+    agencia.icone = '/img/bancos/'+agencia.banco.id+'.png';
+    agencia.marker = '/img/markers/'+agencia.banco.id+'.png';
 
     if (agencia._rev !== undefined) {
       database.local.put(agencia, agencia._id, agencia._rev).then(function(response) {
@@ -130,7 +131,7 @@ angular.module('app.services', [])
 
     // reload data
     var pos = $localStorage.getObject('position');
-    _load(pos, 3);
+    _load(pos, defaultDistance);
 
     return deferred.promise;
   };

@@ -7,7 +7,13 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('app', ['ionic', 'ngCordova', 'app.constants', 'app.controllers', 'app.routes', 'app.services', 'app.directives'])
 
-.run(function($ionicPlatform, $localStorage, $cordovaGeolocation, database, agenciaStore, defaultDistance) {
+.run(function($ionicPlatform, $rootScope, $localStorage, $cordovaGeolocation, database, agenciaStore, defaultDistance) {
+  $rootScope.agencias = [];
+
+  $rootScope.$on('agencia:loaded', function(event, agencias) {
+    $rootScope.agencias = agencias;
+  });
+
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -28,8 +34,11 @@ angular.module('app', ['ionic', 'ngCordova', 'app.constants', 'app.controllers',
         longitude: position.coords.longitude
       };
       $localStorage.setObject('position', pos);
+
       // load data
-      agenciaStore.load(pos, defaultDistance);
+      agenciaStore.load(pos, defaultDistance).then(function(agencias) {
+        $rootScope.agencias = agencias;
+      });
     });
 
     // data sync

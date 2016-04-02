@@ -8,7 +8,7 @@ angular.module('app.controllers', ['uiGmapgoogle-maps'])
   });
 })
 
-.controller('mapaCtrl', function($scope, $ionicPlatform, $localStorage, $state, $cordovaGeolocation, agenciaStore, defaultDistance, mapZoom) {
+.controller('mapaCtrl', function($scope, $rootScope, $ionicPlatform, $localStorage, $state, $cordovaGeolocation, agenciaStore, defaultDistance, mapZoom) {
 	var position = $localStorage.getObject('position');
 
   var mapClick = function(map, event, args) {
@@ -70,21 +70,13 @@ angular.module('app.controllers', ['uiGmapgoogle-maps'])
 		}
 	};
 
-	$scope.agencias = [];
-
   $scope.minhaLocalizacao = minhaLocalizacao;
 
- 	$scope.$on('agencia:loaded', function(event, agencias) {
-    $scope.agencias = agencias;
-  });
+  console.log($rootScope.agencias);
 })
 
-.controller('agenciasCtrl', function($scope, defaultDistance, agenciaStore) {
+.controller('agenciasCtrl', function($scope, $rootScope, defaultDistance, agenciaStore) {
   $scope.distancia = defaultDistance;
-  $scope.agencias = [];
-  $scope.$on('agencia:loaded', function(event, agencias) {
-    $scope.agencias = agencias;
-  });
 })
 
 .controller('adicionarCtrl', function($scope, $localStorage, $ionicLoading, $ionicPopup, $state, uiGmapGoogleMapApi, Geocoder, BancosBrasil, agenciaStore) {
@@ -111,6 +103,14 @@ angular.module('app.controllers', ['uiGmapgoogle-maps'])
   $scope.agencia.longitude = position.longitude;
 
   $scope.salvar = function(agencia) {
+    if (!agencia.banco || !agencia.banco.id) {
+      $ionicPopup.alert({
+        title: 'Campo obrigatório',
+        template: 'Selecione o BANCO'
+      });
+      return;
+    }
+
     $ionicLoading.show({
       template: 'Adicionando...'
     });

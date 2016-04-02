@@ -1,6 +1,6 @@
-<ion-view title="Adicionar Agência" id="adicionar">
+<ion-view title="Adicionar Agência" id="adicionar" cache-view="false">
     <ion-content overflow-scroll="true" padding="true" class="has-header">
-        <form class="list" ng-submit="salvar(agencia)">
+        <form class="list" ng-submit="salvar(agencia)" novalidate>
 
             <label class="item item-input" name="endereco">
                 <input type="text" placeholder="Endereço da agência" ng-model="agencia.endereco">
@@ -9,9 +9,18 @@
             <input type="hidden" ng-model="agencia.latitude" name="latitude"></input>
             <input type="hidden" ng-model="agencia.longitude" name="longitude"></input>
 
+            <label class="item item-input item-select">
+              <div class="input-label">
+                Banco
+              </div>
+              <select ng-model="agencia.banco" ng-options="banco.nome for banco in bancos track by banco.id" required></select>
+            </label>
+
+            <!--
             <div>
               <ion-select label="Banco" label-field="nome" provider="bancos" ng-model="agencia.banco"/>
             </div>
+            -->
 
             <div class="spacer" style="height: 15px;"></div>
 
